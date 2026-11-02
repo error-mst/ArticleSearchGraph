@@ -7,7 +7,7 @@ from torch import Tensor
 
 # Класс для слоя GraphSAGE
 # Количество слоев затем будет принятым за k
-class GraphSAGELayer(nn.Module):
+class SAGELayer(nn.Module):
     def __init__(self, in_channels: int, out_channels: int,
                  aggregator: str = "pool", dropout: float=0.1,
                  activation: bool = True):
