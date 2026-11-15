@@ -9,15 +9,13 @@ def get_articles(query: str, max_results: int = 5000):
 
     return client.results(search)
 
-def get_structured_data(query: str, max_results: int = 5000):
-    data = []
-    articles_ = []
 
-    articles = get_articles(query, max_results=max_results)
-    for article in articles:
-        articles_.append(article.get_short_id())
-        
-        data.append({
+def get_structured_data(query: str, max_results: int = 5000):
+    articles = {}
+    articles_ = get_articles(query, max_results=max_results)
+    
+    for article in articles_:
+        articles[article.get_short_id()] = {
             "arxiv_id": article.get_short_id(),
             "title": article.title,
             "abstract": article.summary,
@@ -26,6 +24,6 @@ def get_structured_data(query: str, max_results: int = 5000):
             "updated": article.updated,
             "categories": ", ".join(article.categories),
              "pdf_url": article.pdf_url,
-        })
+        }
 
-    return articles_, pd.DataFrame(data)
+    return articles
