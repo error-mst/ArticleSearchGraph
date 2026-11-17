@@ -1,5 +1,5 @@
 from .collect_arxiv_data import get_structured_data 
-from .collect_open_alex_data import get_referenced_works, get_arxiv_id
+from .collect_open_alex_data import get_data
 
 def generate_graph_data(query: str):
     
@@ -26,14 +26,8 @@ def generate_graph_data(query: str):
     from_ = []
     to_ = []
 
-    for article in articles.keys():
-        for url_ref_work in get_referenced_works(article):
-            arxiv_id = get_arxiv_id(ref_work)
-            if articles.get(arxiv_id):
-                from_.append(arxiv_id2index[article])
-                to_.append(arxiv_id2index[arxiv_id])
-
+    data = get_data(articles)
     edges.append(from_)
     edges.append(to_)
-    
+    print(data)
     print(edges)
