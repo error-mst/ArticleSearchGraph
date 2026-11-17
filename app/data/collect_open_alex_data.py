@@ -1,4 +1,3 @@
-import requests
 import re
 import asyncio
 import aiohttp
@@ -91,16 +90,9 @@ async def get_arxiv_id(arxiv_id: str, url: str, session: aiohttp.ClientSession):
 
 
 async def get_all_ref_works(articles: list[str]):
-    tasks = []
-
     async with aiohttp.ClientSession() as session:
-        print(20 * "-")
-        print("START GETTING DATA")
         tasks = [asyncio.create_task(get_json(article, session)) for article in articles]
         await asyncio.gather(*tasks)
-        print("DATA ARE DONE")    
-        print(20 * "-")
-        print("START REF WORKS")
 
         tasks = []
         for arxiv_id, article_json in ARXIV_ARTICLES.items():
@@ -108,8 +100,7 @@ async def get_all_ref_works(articles: list[str]):
                 task = asyncio.create_task(get_arxiv_id(arxiv_id, ref_work, session))
                 tasks.append(task)
         await asyncio.gather(*tasks)
-        print("DONE") 
-        print(20 * "-")
+
 def get_data(articles: list[str]):
     asyncio.run(get_all_ref_works(articles))
     return ARXIV_ARTICLES, REFERENCED_WORKS
